@@ -1,0 +1,1 @@
+{"id":"267a0fc0-ff52-4ffb-872c-979d2932fcc3","space":37463,"runtime":"python3.9","name":"API_parser","path":"xlt9o5","project":"a02y568w","account":"144798365827","region":"eu-central-1","deps":["requests~=2.28.1","fastapi~=0.86.0","pydantic~=1.10.2","beautifulsoup4~=4.11.1","selenium~=4.6.0","lxml~=4.9.1"],"envs":null,"public":true,"log_level":"debug","cron":""}
