@@ -15,8 +15,12 @@ def parsing(shopUrl):
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_experimental_option('useAutomationExtension', False)
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 
     driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
     driver.get(shopUrl)
     sleep(5)
 
@@ -60,6 +64,31 @@ def get_gift_from_aliexpress(item: Item):
     except:
         return {"error": "Something went wrong"}
 
+
+@app.post("/regard")
+def get_gift_from_regard(item: Item):
+    try:
+        title = ""
+        price = ""
+        imageUrl = ""
+
+        tree = parsing(item.shopUrl)
+
+        title = tree.xpath('//h1/text()')
+        if title:
+            title = title[0]
+        price = tree.xpath('//span[@class="PriceBlock_price__3hwFe"]/text()')
+        if price:
+            price = price[0]
+        imageUrl = tree.xpath('//img[@class="BigSlider_slide__image__1DrhA"]/@src')
+        if imageUrl:
+            imageUrl = imageUrl[0]
+
+        result = {"title": title, "price": price, "imageUrl": imageUrl}
+        print(result)
+        return result
+    except:
+        return {"error": "Something went wrong"}
 
 
 @app.post("/yandexmarket")
