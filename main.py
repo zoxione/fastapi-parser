@@ -63,7 +63,8 @@ def get_gift_from_aliexpress(item: Item):
             title = title[0]
         price = tree.xpath('//div[@class="snow-price_SnowPrice__secondPrice__18x8np"]/text()')
         if price:
-            price = price[0]
+            price = price[0].replace(" ", "")
+            price = price.replace("₽", "")
         imageUrl = tree.xpath('//img[@data-idx=0]/@src')
         if imageUrl:
             imageUrl = imageUrl[0]
@@ -195,8 +196,6 @@ def get_gift_from_wildberries(item: Item):
         if price:
             price = price[0].replace(" ", "")
             price = price.replace("₽", "")
-            print(price)
-            price = float(price)
         imageUrl = tree.xpath('//img[@height="1200"]/@src')
         if imageUrl:
             imageUrl = imageUrl[0]
