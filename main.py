@@ -195,7 +195,8 @@ def get_gift_from_wildberries(item: Item):
         if price:
             price = price[0].replace(" ", "")
             price = price.replace("₽", "")
-            price = int(price)
+            print(price)
+            price = float(price)
         imageUrl = tree.xpath('//img[@height="1200"]/@src')
         if imageUrl:
             imageUrl = imageUrl[0]
