@@ -86,3 +86,38 @@ def get_gift_from_ozon(item: Item):
         return result
     except:
         return {"error": "Something went wrong"}
+
+
+@app.post("/wildberries")
+def get_gift_from_wildberries(item: Item):
+    try:
+        title = ""
+        price = ""
+        imageUrl = ""
+
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--no-sandbox")
+        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+        driver.get(item.shopUrl)
+        sleep(5)
+        tree = html.fromstring(driver.page_source)
+        driver.quit()
+
+        title = tree.xpath('//h1/text()')
+        if title:
+            title = title[0]
+        price = tree.xpath('//ins/text()')
+        if price:
+            price = price[0]
+        imageUrl = tree.xpath('//img[@height="1200"]/@src')
+        if imageUrl:
+            imageUrl = imageUrl[0]
+
+        result = {"title": title, "price": price, "imageUrl": imageUrl}
+        print(result)
+        return result
+    except:
+        return {"error": "Something went wrong"}
