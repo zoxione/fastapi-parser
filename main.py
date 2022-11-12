@@ -8,6 +8,23 @@ import os
 
 app = FastAPI()
 
+def parsing(shopUrl):
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
+
+    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+    driver.get(shopUrl)
+    sleep(5)
+
+    tree = html.fromstring(driver.page_source)
+    driver.quit()
+
+    return tree
+
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
@@ -78,6 +95,32 @@ def get_gift_from_ozon(item: Item):
         if price:
             price = price[0]
         imageUrl = tree.xpath('//img[@fetchpriority="high"]/@src')
+        if imageUrl:
+            imageUrl = imageUrl[0]
+
+        result = {"title": title, "price": price, "imageUrl": imageUrl}
+        print(result)
+        return result
+    except:
+        return {"error": "Something went wrong"}
+
+
+@app.post("/dns")
+def get_gift_from_dns(item: Item):
+    try:
+        title = ""
+        price = ""
+        imageUrl = ""
+
+        tree = parsing(item.shopUrl)
+
+        title = tree.xpath('//h1/text()')
+        if title:
+            title = title[0]
+        price = tree.xpath('//span[@class="product-buy__prev"]/text()')
+        if price:
+            price = price[0]
+        imageUrl = tree.xpath('//img[@class="product-images-slider__main-img loaded"]/@src')
         if imageUrl:
             imageUrl = imageUrl[0]
 
