@@ -59,16 +59,15 @@ def get_gift_from_aliexpress(item: Item):
         tree = html.fromstring(driver.page_source)
         driver.quit()
 
-        title1 = tree.xpath('//h1/text()')
-        print(title1)
-        # if title:
-        #     title = title[0]
-        # price = tree.xpath('//div[@class="snow-price_SnowPrice__secondPrice__18x8np"]/text()')
-        # if price:
-        #     price = price[0]
-        # imageUrl = tree.xpath('//img[@data-idx=0]/@src')
-        # if imageUrl:
-        #     imageUrl = imageUrl[0]
+        title = tree.xpath('//h1/text()')
+        if title:
+            title = title[0]
+        price = tree.xpath('//div[@class="snow-price_SnowPrice__secondPrice__18x8np"]/text()')
+        if price:
+            price = price[0]
+        imageUrl = tree.xpath('//img[@data-idx=0]/@src')
+        if imageUrl:
+            imageUrl = imageUrl[0]
 
         result = {"title": title, "price": price, "imageUrl": imageUrl}
         print(result)
