@@ -65,6 +65,8 @@ def get_gift_from_aliexpress(item: Item):
         price = tree.xpath('//div[@class="snow-price_SnowPrice__secondPrice__18x8np"]/text()')
         if price:
             price = re.sub('\s+', '', price[0])
+            price = price.replace("руб.", "")
+            price = price.replace(",", "")
         imageUrl = tree.xpath('//img[@data-idx=0]/@src')
         if imageUrl:
             imageUrl = imageUrl[0]
@@ -91,6 +93,7 @@ def get_gift_from_wildberries(item: Item):
         price = tree.xpath('//ins/text()')
         if price:
             price = re.sub('\s+', '', price[0])
+            price = price.replace("₽", "")
         imageUrl = tree.xpath('//img[@height="1200"]/@src')
         if imageUrl:
             imageUrl = imageUrl[0]
@@ -101,106 +104,107 @@ def get_gift_from_wildberries(item: Item):
     except:
         return {"error": "Something went wrong"}
 
-@app.post("/regard")
-def get_gift_from_regard(item: Item):
-    try:
-        title = ""
-        price = ""
-        imageUrl = ""
-
-        tree = parsing(item.shopUrl)
-
-        title = tree.xpath('//h1/text()')
-        if title:
-            title = title[0]
-        price = tree.xpath('//span[@class="PriceBlock_price__3hwFe"]/text()')
-        if price:
-            price = price[0]
-        imageUrl = tree.xpath('//img[@class="BigSlider_slide__image__1DrhA"]/@src')
-        if imageUrl:
-            imageUrl = imageUrl[0]
-
-        result = {"title": title, "price": price, "imageUrl": imageUrl}
-        print(result)
-        return result
-    except:
-        return {"error": "Something went wrong"}
-
-
-@app.post("/yandexmarket")
-def get_gift_from_yandexmarket(item: Item):
-    try:
-        title = ""
-        price = ""
-        imageUrl = ""
-
-        tree = parsing(item.shopUrl)
-
-        title = tree.xpath('//h1/text()')
-        if title:
-            title = title[0]
-        price = tree.xpath('//span[@class="_1Hw8N"]/text()')
-        if price:
-            price = price[0]
-        imageUrl = tree.xpath('//img[@class="_1Gngb"]/@src')
-        if imageUrl:
-            imageUrl = imageUrl[0]
-
-        result = {"title": title, "price": price, "imageUrl": imageUrl}
-        print(result)
-        return result
-    except:
-        return {"error": "Something went wrong"}
-
-
-@app.post("/ozon")
-def get_gift_from_ozon(item: Item):
-    try:
-        title = ""
-        price = ""
-        imageUrl = ""
-
-        tree = parsing(item.shopUrl)
-
-        title = tree.xpath('//h1/text()')
-        if title:
-            title = title[0]
-        price = tree.xpath('//span[@class="ns8"]/text()')
-        if price:
-            price = price[0]
-        imageUrl = tree.xpath('//img[@fetchpriority="high"]/@src')
-        if imageUrl:
-            imageUrl = imageUrl[0]
-
-        result = {"title": title, "price": price, "imageUrl": imageUrl}
-        print(result)
-        return result
-    except:
-        return {"error": "Something went wrong"}
-
-
-@app.post("/dns")
-def get_gift_from_dns(item: Item):
-    try:
-        title = ""
-        price = ""
-        imageUrl = ""
-
-        tree = parsing(item.shopUrl)
-
-        title = tree.xpath('//h1/text()')
-        if title:
-            title = title[0]
-        price = tree.xpath('//span[@class="product-buy__prev"]/text()')
-        if price:
-            price = price[0]
-        imageUrl = tree.xpath('//img[@class="product-images-slider__main-img loaded"]/@src')
-        if imageUrl:
-            imageUrl = imageUrl[0]
-
-        result = {"title": title, "price": price, "imageUrl": imageUrl}
-        print(result)
-        return result
-    except:
-        return {"error": "Something went wrong"}
-
+#
+# @app.post("/regard")
+# def get_gift_from_regard(item: Item):
+#     try:
+#         title = ""
+#         price = ""
+#         imageUrl = ""
+#
+#         tree = parsing(item.shopUrl)
+#
+#         title = tree.xpath('//h1/text()')
+#         if title:
+#             title = title[0]
+#         price = tree.xpath('//span[@class="PriceBlock_price__3hwFe"]/text()')
+#         if price:
+#             price = price[0]
+#         imageUrl = tree.xpath('//img[@class="BigSlider_slide__image__1DrhA"]/@src')
+#         if imageUrl:
+#             imageUrl = imageUrl[0]
+#
+#         result = {"title": title, "price": price, "imageUrl": imageUrl}
+#         print(result)
+#         return result
+#     except:
+#         return {"error": "Something went wrong"}
+#
+#
+# @app.post("/yandexmarket")
+# def get_gift_from_yandexmarket(item: Item):
+#     try:
+#         title = ""
+#         price = ""
+#         imageUrl = ""
+#
+#         tree = parsing(item.shopUrl)
+#
+#         title = tree.xpath('//h1/text()')
+#         if title:
+#             title = title[0]
+#         price = tree.xpath('//span[@class="_1Hw8N"]/text()')
+#         if price:
+#             price = price[0]
+#         imageUrl = tree.xpath('//img[@class="_1Gngb"]/@src')
+#         if imageUrl:
+#             imageUrl = imageUrl[0]
+#
+#         result = {"title": title, "price": price, "imageUrl": imageUrl}
+#         print(result)
+#         return result
+#     except:
+#         return {"error": "Something went wrong"}
+#
+#
+# @app.post("/ozon")
+# def get_gift_from_ozon(item: Item):
+#     try:
+#         title = ""
+#         price = ""
+#         imageUrl = ""
+#
+#         tree = parsing(item.shopUrl)
+#
+#         title = tree.xpath('//h1/text()')
+#         if title:
+#             title = title[0]
+#         price = tree.xpath('//span[@class="ns8"]/text()')
+#         if price:
+#             price = price[0]
+#         imageUrl = tree.xpath('//img[@fetchpriority="high"]/@src')
+#         if imageUrl:
+#             imageUrl = imageUrl[0]
+#
+#         result = {"title": title, "price": price, "imageUrl": imageUrl}
+#         print(result)
+#         return result
+#     except:
+#         return {"error": "Something went wrong"}
+#
+#
+# @app.post("/dns")
+# def get_gift_from_dns(item: Item):
+#     try:
+#         title = ""
+#         price = ""
+#         imageUrl = ""
+#
+#         tree = parsing(item.shopUrl)
+#
+#         title = tree.xpath('//h1/text()')
+#         if title:
+#             title = title[0]
+#         price = tree.xpath('//span[@class="product-buy__prev"]/text()')
+#         if price:
+#             price = price[0]
+#         imageUrl = tree.xpath('//img[@class="product-images-slider__main-img loaded"]/@src')
+#         if imageUrl:
+#             imageUrl = imageUrl[0]
+#
+#         result = {"title": title, "price": price, "imageUrl": imageUrl}
+#         print(result)
+#         return result
+#     except:
+#         return {"error": "Something went wrong"}
+#
