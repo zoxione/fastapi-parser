@@ -1,1 +1,0 @@
-{"id":"60c37bb1-81a7-4a30-b200-c8a7df1ad08d","space":37463,"runtime":"python3.9","name":"API_parser","path":"japx19","project":"a02y568w","account":"144798365827","region":"eu-central-1","deps":["fastapi","selenium","lxml","pydantic"],"envs":null,"public":true,"log_level":"debug","cron":""}
