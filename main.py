@@ -5,6 +5,7 @@ from lxml import html
 from time import sleep
 from fastapi.middleware.cors import CORSMiddleware
 import os
+import re
 
 
 app = FastAPI()
@@ -196,6 +197,7 @@ def get_gift_from_wildberries(item: Item):
         if price:
             price = price[0].replace(" ", "")
             price = price.replace("₽", "")
+            print(re.match('^[ 0-9]+$', price))
         imageUrl = tree.xpath('//img[@height="1200"]/@src')
         if imageUrl:
             imageUrl = imageUrl[0]
