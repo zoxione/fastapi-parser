@@ -3,10 +3,20 @@ from pydantic import BaseModel
 from selenium import webdriver
 from lxml import html
 from time import sleep
+from fastapi.middleware.cors import CORSMiddleware
 import os
 
 
 app = FastAPI()
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 def parsing(shopUrl):
     chrome_options = webdriver.ChromeOptions()
