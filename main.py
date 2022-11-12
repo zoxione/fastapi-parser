@@ -14,6 +14,7 @@ def parsing(shopUrl):
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 
     driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
     driver.get(shopUrl)
@@ -41,16 +42,7 @@ def get_gift_from_aliexpress(item: Item):
         price = ""
         imageUrl = ""
 
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--no-sandbox")
-        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-        driver.get(item.shopUrl)
-        sleep(5)
-        tree = html.fromstring(driver.page_source)
-        driver.quit()
+        tree = parsing(item.shopUrl)
 
         title = tree.xpath('//h1/text()')
         if title:
@@ -70,6 +62,32 @@ def get_gift_from_aliexpress(item: Item):
 
 
 
+@app.post("/yandexmarket")
+def get_gift_from_yandexmarket(item: Item):
+    try:
+        title = ""
+        price = ""
+        imageUrl = ""
+
+        tree = parsing(item.shopUrl)
+
+        title = tree.xpath('//h1/text()')
+        if title:
+            title = title[0]
+        price = tree.xpath('//span[@class="_1Hw8N"]/text()')
+        if price:
+            price = price[0]
+        imageUrl = tree.xpath('//img[@class="_1Gngb"]/@src')
+        if imageUrl:
+            imageUrl = imageUrl[0]
+
+        result = {"title": title, "price": price, "imageUrl": imageUrl}
+        print(result)
+        return result
+    except:
+        return {"error": "Something went wrong"}
+
+
 @app.post("/ozon")
 def get_gift_from_ozon(item: Item):
     try:
@@ -77,16 +95,7 @@ def get_gift_from_ozon(item: Item):
         price = ""
         imageUrl = ""
 
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--no-sandbox")
-        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-        driver.get(item.shopUrl)
-        sleep(5)
-        tree = html.fromstring(driver.page_source)
-        driver.quit()
+        tree = parsing(item.shopUrl)
 
         title = tree.xpath('//h1/text()')
         if title:
@@ -138,16 +147,7 @@ def get_gift_from_wildberries(item: Item):
         price = ""
         imageUrl = ""
 
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--no-sandbox")
-        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-        driver.get(item.shopUrl)
-        sleep(5)
-        tree = html.fromstring(driver.page_source)
-        driver.quit()
+        tree = parsing(item.shopUrl)
 
         title = tree.xpath('//h1/text()')
         if title:
