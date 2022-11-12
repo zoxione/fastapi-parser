@@ -66,6 +66,7 @@ def get_gift_from_aliexpress(item: Item):
         if price:
             price = re.sub('\s+', '', price[0])
             price = price.replace("руб.", "")
+            price = price.replace(",", ".")
         imageUrl = tree.xpath('//img[@data-idx=0]/@src')
         if imageUrl:
             imageUrl = imageUrl[0]
