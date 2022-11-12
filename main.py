@@ -64,8 +64,7 @@ def get_gift_from_aliexpress(item: Item):
             title = title[0]
         price = tree.xpath('//div[@class="snow-price_SnowPrice__secondPrice__18x8np"]/text()')
         if price:
-            price = price[0].replace(" ", "")
-            price = price.replace("₽", "")
+            price = re.sub('\s+', '', price[0])
         imageUrl = tree.xpath('//img[@data-idx=0]/@src')
         if imageUrl:
             imageUrl = imageUrl[0]
@@ -76,6 +75,31 @@ def get_gift_from_aliexpress(item: Item):
     except:
         return {"error": "Something went wrong"}
 
+
+@app.post("/wildberries")
+def get_gift_from_wildberries(item: Item):
+    try:
+        title = ""
+        price = ""
+        imageUrl = ""
+
+        tree = parsing(item.shopUrl)
+
+        title = tree.xpath('//h1/text()')
+        if title:
+            title = title[0]
+        price = tree.xpath('//ins/text()')
+        if price:
+            price = re.sub('\s+', '', price[0])
+        imageUrl = tree.xpath('//img[@height="1200"]/@src')
+        if imageUrl:
+            imageUrl = imageUrl[0]
+
+        result = {"title": title, "price": price, "imageUrl": imageUrl}
+        print(result)
+        return result
+    except:
+        return {"error": "Something went wrong"}
 
 @app.post("/regard")
 def get_gift_from_regard(item: Item):
@@ -180,30 +204,3 @@ def get_gift_from_dns(item: Item):
     except:
         return {"error": "Something went wrong"}
 
-
-@app.post("/wildberries")
-def get_gift_from_wildberries(item: Item):
-    try:
-        title = ""
-        price = ""
-        imageUrl = ""
-
-        tree = parsing(item.shopUrl)
-
-        title = tree.xpath('//h1/text()')
-        if title:
-            title = title[0]
-        price = tree.xpath('//ins/text()')
-        if price:
-            price = price[0].replace(" ", "")
-            price = price.replace("₽", "")
-            print(re.match('^[ 0-9]+$', price))
-        imageUrl = tree.xpath('//img[@height="1200"]/@src')
-        if imageUrl:
-            imageUrl = imageUrl[0]
-
-        result = {"title": title, "price": price, "imageUrl": imageUrl}
-        print(result)
-        return result
-    except:
-        return {"error": "Something went wrong"}
