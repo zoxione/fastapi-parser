@@ -97,6 +97,7 @@ def get_gift_from_wildberries(item: Item):
         imageUrl = tree.xpath('//img[@height="1200"]/@src')
         if imageUrl:
             imageUrl = imageUrl[0]
+            imageUrl = imageUrl.replace('//', 'https://')
 
         result = {"title": title, "price": price, "imageUrl": imageUrl}
         print(result)
